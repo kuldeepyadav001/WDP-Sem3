@@ -1,0 +1,82 @@
+[
+  {
+    "id": 1,
+    "title": "C Programming",
+    "description": "Best book for beginners.",
+    "price": 250,
+    "image": "images/c_programing_book.jpeg",
+    "category": "CSE"
+  },
+  {
+    "id": 2,
+    "title": "Java Programming",
+    "description": "Comprehensive guide to Java.",
+    "price": 350,
+    "image": "images/java_book.jpeg",
+    "category": "CSE"
+  },
+  {
+    "id": 3,
+    "title": "Python Basics",
+    "description": "Learn Python from zero to hero.",
+    "price": 300,
+    "image": "images/python_book.png",
+    "category": "CSE"
+  },
+  {
+    "id": 4,
+    "title": "Data Structures",
+    "description": "Classic DS book for engineers.",
+    "price": 400,
+    "image": "images/ds_book.jpeg",
+    "category": "CSE"
+  },
+  {
+    "id": 5,
+    "title": "Introduction to Thermodynamics",
+    "description": "Fundamentals of thermodynamics for engineers.",
+    "price": 500,
+    "image": "images/thermodynamics_book.jpeg",
+    "category": "Mechanical"
+  },
+  {
+    "id": 6,
+    "title": "Strength of Materials",
+    "description": "Essential book for understanding materials in civil engineering.",
+    "price": 450,
+    "image": "images/strength_of_materials_book.jpeg",
+    "category": "Civil"
+  },
+  {
+    "id": 7,
+    "title": "Electrical Circuits",
+    "description": "A comprehensive guide to electrical circuit analysis.",
+    "price": 400,
+    "image": "images/electrical_circuits_book.jpeg",
+    "category": "Electrical"
+  },
+  {
+    "id": 8,
+    "title": "Digital Signal Processing",
+    "description": "A deep dive into DSP concepts and applications.",
+    "price": 550,
+    "image": "images/dsp_book.jpeg",
+    "category": "ECE"
+  },
+  {
+    "id": 9,
+    "title": "Control Systems Engineering",
+    "description": "A detailed guide on control systems for electrical and mechanical engineers.",
+    "price": 600,
+    "image": "images/control_systems_book.jpeg",
+    "category": "Electrical"
+  },
+  {
+    "id": 10,
+    "title": "Object-Oriented Programming with Java",
+    "description": "Master object-oriented programming principles in Java.",
+    "price": 350,
+    "image": "images/oop_java_book.jpeg",
+    "category": "CSE"
+  }
+]

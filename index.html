@@ -33,21 +33,30 @@
       </div>
 
       <div class="row bg-secondary text-white text-center py-2">
-        <div class="col nav-item" onclick="loadContent('myhome.html')">
-          Home
+        <div class="col nav-item" onclick="loadContent('home.html')">Home</div>
+        <div class="col nav-item" onclick="loadContent('login.html')">
+          Login
         </div>
-        <div class="col nav-item" onclick="loadContent('login.html')">Login</div>
-        <div class="col nav-item" onclick="loadContent('registration.html')">Registration</div>
-        <div class="col nav-item">Catalogue</div>
-        <div class="col nav-item">Cart</div>
+        <div class="col nav-item" onclick="loadContent('register.html')">
+          Registration
+        </div>
+        <div class="col nav-item" onclick="loadContent('catalogue.html')">
+          Catalogue
+        </div>
+        <div class="col nav-item" onclick="loadContent('cart.html')">Cart</div>
       </div>
 
-      <div class="row flex-grow-1">
-        <div class="left col-2 p-3 border-end bg-light">
+      <div class="d-flex flex-grow-1">
+        <div class="left col-2 p-3 border-end">
           <h5>Categories</h5>
-          <ul class="list-group"></ul>
+          <ul class="list-group">
+            <li class="list-group-item nav-item" onclick="loadCategory('CSE')">CSE</li>
+            <li class="list-group-item nav-item" onclick="loadCategory('ECE')">ECE</li>
+            <li class="list-group-item nav-item" onclick="loadCategory('Mechanical')">Mechanical</li>
+            <li class="list-group-item nav-item" onclick="loadCategory('Civil')">Civil</li>
+            <li class="list-group-item nav-item" onclick="loadCategory('Electrical')">Electrical</li>
+          </ul>
         </div>
-
         <div class="right col p-4" id="rightContent">
           <h4>Welcome to the Online Bookstore</h4>
           <p>
@@ -58,6 +67,147 @@
     </div>
 
     <script>
+      function regUser(e) {
+        e.preventDefault();
+        let name = document.getElementById("regName").value;
+        let email = document.getElementById("regEmail").value;
+        let password = document.getElementById("regPassword").value;
+        let user = { name, email, password };
+        console.log(user);
+        localStorage.setItem("user", JSON.stringify(user));
+        alert("Registered");
+      }
+      function loadCategory(cat){
+        fetch("books.json")
+          .then((res) => res.json())
+          .then((data) => displayBook(data));
+        function displayBook(data) {
+          rohan = "";
+          let catbook = data.filter(books => books.category === cat)
+          catbook.forEach((book) => {
+            rohan += `
+          <tr>
+          <th> <img src="${book.image}" alt=${book.title}></th>
+          <td>${book.title}</td>
+          <td>${book.description}</td>
+          <td>₹${book.price}</td>
+          <td><button class="btn btn-warning w-100"
+                    onclick="addToCart('${book.title}', ${book.price}, '${book.image}')">
+                    Add to Cart
+                  </button></td>
+        </tr>
+         `;
+          });
+          document.getElementById("bookCatBox").innerHTML = rohan;
+        }
+        document.getElementById("rightContent").innerHTML = `<h1>${cat} Catalogue Page</h1>
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th scope="col">Image</th>
+      <th scope="col">Title</th>
+      <th scope="col">Description</th>
+      <th scope="col">Price</th>
+      <th scope="col"></th>
+    </tr>
+  </thead>
+  <tbody id="bookCatBox"></tbody>
+</table>`;
+      }
+      function logUser(e) {
+        e.preventDefault();
+        let email = document.getElementById("logEmail").value;
+        let password = document.getElementById("logPassword").value;
+
+        let savedUser = localStorage.getItem("user");
+        console.log(savedUser);
+        if (savedUser.email === email && savedUser.password === password) {
+          alert(`welcome ${savedUser.name}`);
+        }
+      }
+      function loadBooks() {
+        fetch("books.json")
+          .then((res) => res.json())
+          .then((data) => displayBook(data));
+        function displayBook(data) {
+          rohan = "";
+
+          data.forEach((book) => {
+            rohan += `
+          <tr>
+          <th> <img src="${book.image}" alt=${book.title}></th>
+          <td>${book.title}</td>
+          <td>${book.description}</td>
+          <td>₹${book.price}</td>
+          <td><button class="btn btn-warning w-100"
+                    onclick="addToCart('${book.title}', ${book.price}, '${book.image}')">
+                    Add to Cart
+                  </button></td>
+        </tr>
+         `;
+          });
+          document.getElementById("bookBox").innerHTML = rohan;
+        }
+      }
+      function addToCart(title, price, image){
+        let cart = JSON.parse(localStorage.getItem("cart")) || [];
+        cart.push({id:new Date,title, price, image});
+        localStorage.setItem("cart", JSON.stringify(cart));
+        console.log(cart)
+      }
+      function loadCart(){
+        let cart = JSON.parse(localStorage.getItem("cart"));
+        let upi = '9559537766@upi';
+        let name = 'Deepak Pal'
+        let cartBox = document.getElementById("cartBookBox")
+        console.log(cart)
+        if(!cart){
+          cartBox.innerHTML=`<div class="danger">Books Not Found</div>`;
+        }
+        let html = ""
+        cart.forEach(book =>
+          html += `<tr>
+          <th> <img src="${book.image}" alt=${book.title}></th>
+          <td>${book.title}</td>
+          <td>₹${book.price}</td>
+          <td><button class="btn btn-danger w-100" onclick="removeBook('${book.id}')">
+                    Remove Book
+                  </button></td>
+        </tr>`
+        )
+        cartBox.innerHTML = html
+
+        let total = cart.reduce((sum, book)=> sum +=book.price,0)
+        document.getElementById("total").innerHTML = `<h1>Total Amount: $${total}`
+        let upiLink = `upi://pay?pa=${upi}&pn=${name}&am=${total}&cu=INR`;
+        // Once the script is loaded, you can run this:
+const canvas = document.getElementById('canvas');
+qrcode.toCanvas(canvas, total, function (error) {
+  if (error) console.error(error);
+  console.log('QR code generated!');
+});
+
+        document.getElementById('qrcode').innerHTML = canvas;
+        // new QRCode(document.getElementById("qrcode"), {
+        //         text: upiURI,
+        //         width: 200,
+        //         height: 200,
+        //         colorDark : "#000000",
+        //         colorLight : "#ffffff",
+        //         correctLevel : QRCode.CorrectLevel.H
+        //     });
+
+        
+
+      }
+      function removeBook(id){
+        let cart = JSON.parse(localStorage.getItem("cart"));
+        cart = cart.filter(book => book.id !== id)
+        localStorage.setItem("cart", JSON.stringify(cart))
+        console.log(cart)
+        loadCart();
+        
+      }
       function loadContent(page) {
         console.log("inside a Function");
         fetch(page)
@@ -67,15 +217,16 @@
           })
           .then((html) => {
             document.getElementById("rightContent").innerHTML = html;
-          })
-          .catch(() => {
-            document.getElementById("rightContent").innerHTML =
-              '<div class="alert alert-danger">Error loading page.</div>';
+            if (page === "catalogue.html") {
+              loadBooks();
+            }
+            if (page === "cart.html") {
+              loadCart();
+            }
           });
       }
 
-      window.onload = () => loadContent("index.html");
-      
+      window.onload = () => loadContent("myhome.html");
     </script>
 
     <script
@@ -83,5 +234,8 @@
       integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
       crossorigin="anonymous"
     ></script>
+    <script src="cdn.jsdelivr.net"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
   </body>
 </html>
